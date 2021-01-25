@@ -3,6 +3,23 @@ const mongoose = require('mongoose');
 const router = express.Router();
 const Order = require('../models/order');
 
+
+router.get("/", (req, res, next) => {
+  const id = req.params.id;
+
+  Order.find()
+    .exec()
+    .then(data => {
+      res.status(200).json(data);
+    })
+    .catch((error) => {
+      console.log(error);
+      const err = new Error(error);
+      err.status = error.status || 500;
+      next(err);
+    })
+});
+
 router.get("/:id", (req, res, next) => {
   const id = req.params.id;
 
