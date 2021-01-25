@@ -21,7 +21,7 @@ router.get("/", (req, res, next) => {
 });
 
 router.get("/:id", (req, res, next) => {
-  const id = req.params.id;
+  const id = req.params.invoiceId;
 
   Order.findById(id)
     .exec()
