@@ -3,6 +3,9 @@ const mongoose = require('mongoose');
 const router = express.Router();
 const Order = require('../models/order');
 const { jsPDF } = require("jspdf");
+const nodemailer = require("nodemailer");
+
+
 function errorFunc(error) {
   console.log(error);
   const err = new Error(error);
@@ -47,6 +50,7 @@ router.get("/:id", (req, res, next) => {
     })
 });
 
+const port = 3000;
 router.post("/", (req, res, next) => {
   const order = new Order({
     _id: new mongoose.Types.ObjectId(),
@@ -90,7 +94,8 @@ router.post("/", (req, res, next) => {
           doc.text(newOrder.state, 20, 38);
           doc.text(newOrder.phoneNumber, 20, 44);
           doc.text(newOrder.tracking, 20, 50);
-          doc.save("shipping" + newOrder.invoiceId.toString() + ".pdf");
+          //doc.save("shipping" + newOrder.invoiceId.toString() + ".pdf");
+          sendMail(newOrder, doc);
 
           res.status(201).json({
             message: "Shippment successfully created!",
@@ -183,4 +188,44 @@ function GenerateTrackingID(shipping, id) {
       break;
   }
   return TrackingNumber;
+}
+
+
+function sendMail(inp, pdf) {
+
+  // Dethär är texten som för emailet.
+  // Joo ja vet att template literals (`) is a thing. 
+  //mailBody = "Hello " + inp.fname + " " + inp.lname +
+  //  "\n\nYou purchased " + inp.amount + " ticket(s) from " + inp.from + " to " + inp.to +
+  //  "\n\nTicket Zone: " + inp.zones +
+  //  "\nAmount: " + inp.amount +
+  //  "\nPrice: " + (inp.price * inp.amount).toFixed(2) + "\n\n" +
+  //  inp.itinerary;
+//
+  mailBody = pdf;
+  
+  // Dethär är koden för att skicka ett mail
+  var transport = nodemailer.createTransport({
+    domains: ["fastmail.fm"],
+    host: "smtp.fastmail.com",
+    port: 465,
+    secure: true,
+    auth: { user: "grupp3ramverk@fastmail.com", pass: "97xyff4dng73klua" },
+  });
+
+  var mailOptions = {
+    from: "asl@ticket.fi",
+    to: inp.email,
+    subject: "ASL Ticket Service",
+    text: mailBody,
+
+  };
+
+  transport.sendMail(mailOptions, function (error, info) {
+    if (error) {
+      console.log(error);
+    } else {
+      console.log("Email sent: " + info.response);
+    }
+  });
 }

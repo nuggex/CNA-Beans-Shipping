@@ -15,6 +15,7 @@ The service runs at https://beansshipping.herokuapp.com/
 - invoiceId (type: Number, required yes)
 - firstName (type: String, required yes)
 - lastName (type: String, required yes)
+- email (type: String, required yes)
 - address (type: String, required yes)
 - town (type: String, required yes)
 - state (type: String, required yes)
