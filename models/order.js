@@ -11,7 +11,8 @@ const orderSchema = mongoose.Schema({
   date: { type: Date, required: true },
   phoneNumber: { type: String, required: true },
   zipCode: { type: Number, required: true },
-  tracking: {type: String, required: true }
+  shipping: {type: String, required: true },
+  tracking: {type: String}
 });
 
 module.exports = mongoose.model('Order',orderSchema);

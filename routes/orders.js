@@ -3,11 +3,11 @@ const mongoose = require('mongoose');
 const router = express.Router();
 const Order = require('../models/order');
 
-function errorFunc(error){
+function errorFunc(error) {
   console.log(error);
-      const err = new Error(error);
-      err.status = error.status || 500;
-      next(err);
+  const err = new Error(error);
+  err.status = error.status || 500;
+  next(err);
 }
 
 router.get("/", (req, res, next) => {
@@ -25,7 +25,7 @@ router.get("/", (req, res, next) => {
 
 router.get("/:id", (req, res, next) => {
   const id = req.params.id;
-  Order.find({invoiceId : id})
+  Order.find({ invoiceId: id })
     .exec()
     .then(data => {
       res.status(200).json(data);
@@ -47,14 +47,17 @@ router.post("/", (req, res, next) => {
     date: req.body.date,
     phoneNumber: req.body.phoneNumber,
     zipCode: req.body.zipCode,
-    tracking: req.body.tracking,
+    shipping: req.body.shipping,
   });
+
   order.save()
     .then((result) => {
       res.status(201).json({
         message: "Shippment successfully created!",
+        
         order: order,
       })
+      console.log(result);
     })
     .catch((error) => {
       errorFunc(error);
@@ -81,15 +84,15 @@ router.delete("/:id", (req, res, next) => {
 })
 router.patch("/:id", (req, res, next) => {
   Order.update({ _id: req.params.id }, { $set: req.body })
-      .exec()
-      .then((result) => {
-          res.status(200).json({
-              message: "Order updated!" + result,
-          });
-      })
-      .catch((error) => {
-        errorFunc(error);
+    .exec()
+    .then((result) => {
+      res.status(200).json({
+        message: "Order updated!" + result,
       });
+    })
+    .catch((error) => {
+      errorFunc(error);
+    });
 });
 
 router.use((req, res, next) => {
@@ -99,3 +102,41 @@ router.use((req, res, next) => {
 });
 
 module.exports = router;
+
+
+function GenerateTrackingID(shipping, id) {
+  let TrackingNumber;
+  let parseid = parseInt(teststring, 16).toString().substring(0,13).replace(".","");
+  switch (shipping) {
+    case "DHL":
+      TrackingNumber = "JVGL" + parseid.substring(0,11);
+      break;
+    case "Posti":
+      TrackingNumber = "JJFI" + parseid;
+      break;
+    case "UPS":
+      TrackingNumber = parseid;
+      break;
+    case "PostNord":
+      TrackingNumber = "0037" + parseid;
+      break;
+    case "DPD":
+      TrackingNumber = parseid;
+      break;
+    case "TNT":
+      TrackingNumber = "GE" + parseid.substring(0,10) + "WW";
+      break;
+    case "Bring":
+      TrackingNumber = "CT" + parseid.substring(0,10) + "FI"
+      break;
+    case "Matkahuolto":
+      TrackingNumber = "MH" + parseid;
+      break;
+    case "BudBee":
+      TrackingNumber = "ASS" + parseid.substring(0,10) + "OS";
+      break;
+    default:
+      TrackingNumber = id
+  }
+  return TrackingNumber;
+}
