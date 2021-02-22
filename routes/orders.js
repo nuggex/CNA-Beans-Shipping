@@ -68,7 +68,7 @@ router.post("/", (req, res, next) => {
     .then((result) => {
       trackingId = GenerateTrackingID(result.shipping, result._id)
       //labelURL = "https://beansshipping.herokuapp.com/shipping" + result.invoiceId.toString() + ".pdf";
-      Order.update({ _id: result._id }, { tracking: trackingId, labelURL: labelURL })
+      Order.update({ _id: result._id }, { tracking: trackingId })
         .exec()
         .then((result) => {
           let newOrder = order.toObject();
