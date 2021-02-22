@@ -52,18 +52,15 @@ router.post("/", (req, res, next) => {
 
   order.save()
     .then((result) => {
-      Order.update({ _id: result._id }, { tracking: GenerateTrackingID(result.shipping, result._id) })
+      trackingId = GenerateTrackingID(result.shipping, result._id)
+      Order.update({ _id: result._id }, { tracking: trackingId })
         .exec()
         .then((result) => {
-          let returnableResult = [];
-          for(i in result){
-            if(i != "_id"){
-              returnableResult.push(result[i])
-            }
-          };
+          order["tracking"] = trackingId;
+         
           res.status(201).json({
             message: "Shippment successfully created!",
-            order: returnableResult,
+            order: order,
           });
         })
         .catch((error) => {
