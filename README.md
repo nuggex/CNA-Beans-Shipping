@@ -3,11 +3,11 @@ Cloud Native Apps Shipping Servicfe
 
 
 Shipping MicroService for Cloud Native Apps course @ Arcada UAES 2021
+The service runs at https://beansshipping.herokuapp.com/
 
 ## Routes 
 
 - /orders responds to GET, GET/:ID, POST and DELETE/:ID
-
 
 ## POST
 
@@ -25,9 +25,16 @@ Shipping MicroService for Cloud Native Apps course @ Arcada UAES 2021
 
 
 Tracking code will be automatically generated based on shipping input.
-Be sure to enter correct shipping company or the request will be rejected since tracking code can't be generated. 
+Be sure to enter correct shipping company or the request will be defaulted to id since tracking code can't be generated. 
 
 ## GET
 
 - Get without ID will get all shipping labels
 - Get with invoice ID will get shipping information for that invoice
+
+## DELETE
+
+# WARNING PLZ DO NOT USE DELETE
+
+- We encourage you to not delete entries unless absolutely necessery. 
+- For security reasons you have to use MongoID when deleting an item.
