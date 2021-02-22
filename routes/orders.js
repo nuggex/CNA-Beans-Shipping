@@ -16,11 +16,12 @@ router.get("/", (req, res, next) => {
   Order.find()
     .exec()
     .then(data => {
-      console.log(data);
+      console.log(data);  
       let newData = data.map(x => {
-        let newOrder = {};
-        for (let [k, v] of Object.entries(x)) { if (k != "_id") { newOrder[k] = v } }
-        return newOrder;
+        console.log(x);
+        //let newOrder = {};
+        //for (let [k, v] of Object.entries(x)) { if (k != "_id") { newOrder[k] = v } }
+        //return newOrder;
       })
       res.status(200).json(newData);
     })
