@@ -2,7 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const router = express.Router();
 const Order = require('../models/order');
-
+const { jsPDF } = require("jspdf");
 function errorFunc(error) {
   console.log(error);
   const err = new Error(error);
@@ -16,14 +16,11 @@ router.get("/", (req, res, next) => {
   Order.find()
     .exec()
     .then(data => {
-      
-  
       let newData = data.map(x => {
         let test = x.toObject();
         delete test._id;
         delete test.__v
         return test
-
       })
       res.status(200).json(newData);
     })
@@ -43,7 +40,6 @@ router.get("/:id", (req, res, next) => {
         delete test.__v
         return test
       })
-      
       res.status(200).json(newData);
     })
     .catch((error) => {
@@ -65,15 +61,21 @@ router.post("/", (req, res, next) => {
     zipCode: req.body.zipCode,
     shipping: req.body.shipping,
   });
+  var doc = new jsPDF()
+
+  doc.text('Beans Hats and Hats', 100, 100)
+  doc.save(invoiceId)
 
   order.save()
     .then((result) => {
       trackingId = GenerateTrackingID(result.shipping, result._id)
+      labelURL = "shipping" + order.invoiceId + ".pdf";
       Order.update({ _id: result._id }, { tracking: trackingId })
         .exec()
         .then((result) => {
           let newOrder = order.toObject();
           delete newOrder._id;
+          delete newOrder.__v;
           newOrder["tracking"] = trackingId;
           
           res.status(201).json({
