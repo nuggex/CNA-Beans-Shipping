@@ -54,10 +54,13 @@ router.post("/", (req, res, next) => {
     .then((result) => {
       res.status(201).json({
         message: "Shippment successfully created!",
-        
         order: order,
       })
-      console.log(result);
+      Order.update({ _id: result._id }, { tracking: GenerateTrackingID(result._shipping, result._id) })
+        .exec()
+        .then((result) => {
+          console.log(result);
+        });
     })
     .catch((error) => {
       errorFunc(error);
@@ -106,10 +109,10 @@ module.exports = router;
 
 function GenerateTrackingID(shipping, id) {
   let TrackingNumber;
-  let parseid = parseInt(teststring, 16).toString().substring(0,13).replace(".","");
+  let parseid = parseInt(teststring, 16).toString().substring(0, 13).replace(".", "");
   switch (shipping) {
     case "DHL":
-      TrackingNumber = "JVGL" + parseid.substring(0,11);
+      TrackingNumber = "JVGL" + parseid.substring(0, 11);
       break;
     case "Posti":
       TrackingNumber = "JJFI" + parseid;
@@ -124,16 +127,16 @@ function GenerateTrackingID(shipping, id) {
       TrackingNumber = parseid;
       break;
     case "TNT":
-      TrackingNumber = "GE" + parseid.substring(0,10) + "WW";
+      TrackingNumber = "GE" + parseid.substring(0, 10) + "WW";
       break;
     case "Bring":
-      TrackingNumber = "CT" + parseid.substring(0,10) + "FI"
+      TrackingNumber = "CT" + parseid.substring(0, 10) + "FI"
       break;
     case "Matkahuolto":
       TrackingNumber = "MH" + parseid;
       break;
     case "BudBee":
-      TrackingNumber = "ASS" + parseid.substring(0,10) + "OS";
+      TrackingNumber = "ASS" + parseid.substring(0, 10) + "OS";
       break;
     default:
       TrackingNumber = id
