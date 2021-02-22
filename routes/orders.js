@@ -17,6 +17,7 @@ router.get("/", (req, res, next) => {
     .exec()
     .then(data => {
       let newData = data.map(x => {
+        delete x._id;
         console.log(x._id);
         //let newOrder = {};
         //for (let [k, v] of Object.entries(x)) { if (k != "_id") { newOrder[k] = v } }
