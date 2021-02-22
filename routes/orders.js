@@ -60,11 +60,11 @@ router.post("/", (req, res, next) => {
             if(i != "_id"){
               returnableResult.push(result[i])
             }
-          }
+          };
           res.status(201).json({
             message: "Shippment successfully created!",
             order: returnableResult,
-          })
+          });
         })
         .catch((error) => {
           errorFunc(error)
@@ -72,8 +72,8 @@ router.post("/", (req, res, next) => {
     })
     .catch((error) => {
       errorFunc(error);
-    })
-})
+    });
+});
 
 router.delete("/:id", (req, res, next) => {
   Order.remove({ _id: req.params.id })
