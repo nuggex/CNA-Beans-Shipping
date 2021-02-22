@@ -177,7 +177,7 @@ function sendMail(inp) {
   // Joo ja vet att template literals (`) is a thing. 
   mailBody = "Hello " + inp.firstName + " " + inp.lastName +
     "\n\nYour order, invoice ID " + inp.invoiceId + " has been sent." +
-    "\n\nTracking id:" + inp.trackingId;
+    "\n\nTracking id:" + inp.tracking;
 
   // Dethär är koden för att skicka ett mail
   var transport = nodemailer.createTransport({
