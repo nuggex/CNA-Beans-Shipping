@@ -2,7 +2,7 @@ const mongoose = require('mongoose')
 
 const orderSchema = mongoose.Schema({
   _id: mongoose.Types.ObjectId,
-  invoiceId: { type: Number, required: true },
+  orderId: { type: Number, required: true },
   firstName: { type: String, required: true },
   lastName: { type: String, required: true },
   address: { type: String, required: true },

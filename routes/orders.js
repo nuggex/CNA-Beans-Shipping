@@ -31,7 +31,7 @@ router.get("/", (req, res, next) => {
 
 router.get("/:id", (req, res, next) => {
   const id = req.params.id;
-  Order.find({ invoiceId: id })
+  Order.find({ orderId: id })
     .exec()
     .then(data => {
       let newData = data.map(x => {
@@ -51,7 +51,7 @@ const port = 3000;
 router.post("/", (req, res, next) => {
   const order = new Order({
     _id: new mongoose.Types.ObjectId(),
-    invoiceId: req.body.invoiceId,
+    orderId: req.body.orderId,
     firstName: req.body.firstName,
     lastName: req.body.lastName,
     address: req.body.address,
@@ -67,7 +67,7 @@ router.post("/", (req, res, next) => {
   order.save()
     .then((result) => {
       trackingId = GenerateTrackingID(result.shipping, result._id)
-      //labelURL = "https://beansshipping.herokuapp.com/shipping" + result.invoiceId.toString() + ".pdf";
+      //labelURL = "https://beansshipping.herokuapp.com/shipping" + result.orderId.toString() + ".pdf";
       Order.update({ _id: result._id }, { tracking: trackingId })
         .exec()
         .then((result) => {
@@ -176,7 +176,7 @@ function sendMail(inp) {
   // Dethär är texten som för emailet.
   // Joo ja vet att template literals (`) is a thing. 
   mailBody = "Hello " + inp.firstName + " " + inp.lastName +
-    "\n\nYour order, invoice ID " + inp.invoiceId + " has been sent." +
+    "\n\nYour order, invoice ID " + inp.orderId + " has been sent." +
     "\n\nTracking id:" + inp.tracking;
 
   // Dethär är koden för att skicka ett mail

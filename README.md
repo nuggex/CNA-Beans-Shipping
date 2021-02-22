@@ -12,7 +12,7 @@ The service runs at https://beansshipping.herokuapp.com/
 ## POST
 
 ### Post requires 
-- invoiceId (type: Number, required yes)
+- orderId (type: Number, required yes)
 - firstName (type: String, required yes)
 - lastName (type: String, required yes)
 - email (type: String, required yes)
