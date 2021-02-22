@@ -16,8 +16,12 @@ router.get("/", (req, res, next) => {
   Order.find()
     .exec()
     .then(data => {
-      data.map(x => delete x._id);
-      res.status(200).json(data);
+      let newData = data.map(x => {
+        let newOrder = {};
+        for (let [k, v] of Object.entries(order)) { if (k != "_id") { newOrder[k] = v } }
+        return newOrder;
+      })
+      res.status(200).json(newData);
     })
     .catch((error) => {
       errorFunc(error);
@@ -29,9 +33,10 @@ router.get("/:id", (req, res, next) => {
   Order.find({ invoiceId: id })
     .exec()
     .then(data => {
-      console.log(data);
-      delete data[0]._id;
-      res.status(200).json(data);
+
+      let newOrder = {};
+      for (let [k, v] of Object.entries(data)) { if (k != "_id") { newOrder[k] = v } }
+      res.status(200).json(newOrder);
     })
     .catch((error) => {
       errorFunc(error);
@@ -60,10 +65,12 @@ router.post("/", (req, res, next) => {
         .exec()
         .then((result) => {
           order["tracking"] = trackingId;
-          delete order._id;
+
+          let newOrder = {};
+          for (let [k, v] of Object.entries(order)) { if (k != "_id") { newOrder[k] = v } }
           res.status(201).json({
             message: "Shippment successfully created!",
-            order: order,
+            order: newOrder
           });
         })
         .catch((error) => {
