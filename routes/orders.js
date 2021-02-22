@@ -85,6 +85,7 @@ router.delete("/:id", (req, res, next) => {
       }
     })
     .catch((error) => {
+
       errorFunc(error);
     })
 })
@@ -112,7 +113,7 @@ module.exports = router;
 
 function GenerateTrackingID(shipping, id) {
   let TrackingNumber;
-  let parseid = parseInt(teststring, 16).toString().substring(0, 13).replace(".", "");
+  let parseid = parseInt(id, 16).toString().substring(0, 13).replace(".", "");
   switch (shipping) {
     case "DHL":
       TrackingNumber = "JVGL" + parseid.substring(0, 11);
