@@ -66,15 +66,15 @@ router.post("/", (req, res, next) => {
   order.save()
     .then((result) => {
       trackingId = GenerateTrackingID(result.shipping, result._id)
-      labelURL = "https://beansshipping.herokuapp.com/shipping" + result.invoiceId + ".pdf";
-      Order.update({ _id: result._id }, { tracking: trackingId })
+      labelURL = "https://beansshipping.herokuapp.com/shipping" + result.invoiceId.toString() + ".pdf";
+      Order.update({ _id: result._id }, { tracking: trackingId, labelURL: labelURL })
         .exec()
         .then((result) => {
           let newOrder = order.toObject();
           delete newOrder._id;
           delete newOrder.__v;
           newOrder["tracking"] = trackingId;
-
+          newOrder["labelURL"] = labelURL;
           const doc = new jsPDF({
             orientation: "landscape",
             unit: "mm",
@@ -90,7 +90,7 @@ router.post("/", (req, res, next) => {
           doc.text(newOrder.state, 20, 38);
           doc.text(newOrder.phoneNumber, 20, 44);
           doc.text(newOrder.tracking, 20, 50);
-          doc.save("shipping" + newOrder.invoiceId + ".pdf");
+          doc.save("shipping" + newOrder.invoiceId.toString() + ".pdf");
 
           res.status(201).json({
             message: "Shippment successfully created!",
