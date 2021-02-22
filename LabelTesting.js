@@ -30,7 +30,11 @@ doc.text(order.state, 20, 38);
 doc.text(order.phoneNumber, 20, 44);
 doc.text(order.tracking, 20, 50);
 doc.save("shipping" + order.invoiceId + ".pdf");
-
+const doc = new jsPDF({
+    orientation: "landscape",
+    unit: "mm",
+    format: [100, 75]
+  });
           /*doc.setFontSize(20);
           doc.text('Beans Hats and Hats', 10, 10);
           doc.setFontSize(12);

@@ -2,9 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const router = express.Router();
 const Order = require('../models/order');
-const { jsPDF } = require("jspdf");
 const nodemailer = require("nodemailer");
-
 
 function errorFunc(error) {
   console.log(error);
@@ -66,11 +64,10 @@ router.post("/", (req, res, next) => {
     shipping: req.body.shipping,
   });
 
-
   order.save()
     .then((result) => {
       trackingId = GenerateTrackingID(result.shipping, result._id)
-      labelURL = "https://beansshipping.herokuapp.com/shipping" + result.invoiceId.toString() + ".pdf";
+      //labelURL = "https://beansshipping.herokuapp.com/shipping" + result.invoiceId.toString() + ".pdf";
       Order.update({ _id: result._id }, { tracking: trackingId, labelURL: labelURL })
         .exec()
         .then((result) => {
@@ -78,15 +75,8 @@ router.post("/", (req, res, next) => {
           delete newOrder._id;
           delete newOrder.__v;
           newOrder["tracking"] = trackingId;
-          newOrder["labelURL"] = labelURL;
-          const doc = new jsPDF({
-            orientation: "landscape",
-            unit: "mm",
-            format: [100, 75]
-          });
-
+          //newOrder["labelURL"] = labelURL;
           sendMail(newOrder);
-
           res.status(201).json({
             message: "Shippment successfully created!",
             order: newOrder
@@ -186,11 +176,9 @@ function sendMail(inp) {
   // Dethär är texten som för emailet.
   // Joo ja vet att template literals (`) is a thing. 
   mailBody = "Hello " + inp.firstName + " " + inp.lastName +
-  "\n\nYour order, invoice ID " + inp.invoiceId + " has been sent."+
-  "\n\nTracking id:" + inp.trackingId;
+    "\n\nYour order, invoice ID " + inp.invoiceId + " has been sent." +
+    "\n\nTracking id:" + inp.trackingId;
 
-  mailBody = pdf;
-  
   // Dethär är koden för att skicka ett mail
   var transport = nodemailer.createTransport({
     domains: ["xonet.fi"],
