@@ -16,10 +16,19 @@ router.get("/", (req, res, next) => {
   Order.find()
     .exec()
     .then(data => {
+      
+      //let saveable = data.toObject();
+      
+      
+      //let saveable = Object.getOwnPropertyNames(data)
+      //.reduce((out,prop)=> Object.assign(out,data[prop]),{})
       let newData = data.map(x => {
-        delete x._id;
-        x._id = "";
-        console.log(x._id);
+        let test = x.toObject();
+        delete test._id;
+        return test
+        //  delete x._id;
+      //  x._id = "";
+      //  console.log(x._id);
         //let newOrder = {};
         //for (let [k, v] of Object.entries(x)) { if (k != "_id") { newOrder[k] = v } }
         //return newOrder;
