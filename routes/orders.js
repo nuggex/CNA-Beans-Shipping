@@ -56,7 +56,7 @@ router.post("/", (req, res, next) => {
         message: "Shippment successfully created!",
         order: order,
       })
-      Order.update({ _id: result._id }, { tracking: GenerateTrackingID(result._shipping, result._id) })
+      Order.update({ _id: result._id }, { tracking: GenerateTrackingID(result.shipping, result._id) })
         .exec()
         .then((result) => {
           console.log(result);
@@ -143,7 +143,7 @@ function GenerateTrackingID(shipping, id) {
       TrackingNumber = "ASS" + parseid.substring(0, 10) + "OS";
       break;
     default:
-      TrackingNumber = id
+      TrackingNumber = parseid;
       break;
   }
   return TrackingNumber;
