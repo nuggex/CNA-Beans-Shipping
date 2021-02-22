@@ -16,7 +16,7 @@ router.get("/", (req, res, next) => {
   Order.find()
     .exec()
     .then(data => {
-      delete data._id;
+      data.map(x => delete x._id);
       res.status(200).json(data);
     })
     .catch((error) => {
@@ -29,7 +29,8 @@ router.get("/:id", (req, res, next) => {
   Order.find({ invoiceId: id })
     .exec()
     .then(data => {
-      delete data._id;
+      console.log(data);
+      delete data[0]._id;
       res.status(200).json(data);
     })
     .catch((error) => {
