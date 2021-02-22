@@ -28,6 +28,7 @@ The service runs at https://beansshipping.herokuapp.com/
 Tracking code will be automatically generated based on shipping input.
 Be sure to enter correct shipping company or the request will be defaulted to id since tracking code can't be generated. 
 If succesfull post returns the created shipping information as JSON. Object id is ommitted from return for secuirty reasons.
+When succesfull the post method also sends a email to the users email with the shipping information.
 
 ## GET
 
