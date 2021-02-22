@@ -55,7 +55,7 @@ router.post("/", (req, res, next) => {
       Order.update({ _id: result._id }, { tracking: GenerateTrackingID(result.shipping, result._id) })
         .exec()
         .then((result) => {
-          let returnableResult;
+          let returnableResult = [];
           for(i in result){
             if(i != "_id"){
               returnableResult.push(result[i])
