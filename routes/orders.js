@@ -206,17 +206,17 @@ function sendMail(inp, pdf) {
   
   // Dethär är koden för att skicka ett mail
   var transport = nodemailer.createTransport({
-    domains: ["fastmail.fm"],
-    host: "smtp.fastmail.com",
+    domains: ["xonet.fi"],
+    host: "smtp.xonet.fi",
     port: 465,
     secure: true,
-    auth: { user: "grupp3ramverk@fastmail.com", pass: "97xyff4dng73klua" },
+    auth: { user: "beans@dinmamma.fi", pass: "beanspotato" },
   });
 
   var mailOptions = {
-    from: "asl@ticket.fi",
+    from: "beans@dinmamma.fi",
     to: inp.email,
-    subject: "ASL Ticket Service",
+    subject: "BeansShipping information",
     text: mailBody,
 
   };
