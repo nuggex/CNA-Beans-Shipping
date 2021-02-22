@@ -17,21 +17,13 @@ router.get("/", (req, res, next) => {
     .exec()
     .then(data => {
       
-      //let saveable = data.toObject();
-      
-      
-      //let saveable = Object.getOwnPropertyNames(data)
-      //.reduce((out,prop)=> Object.assign(out,data[prop]),{})
+  
       let newData = data.map(x => {
         let test = x.toObject();
         delete test._id;
+        delete test.__v
         return test
-        //  delete x._id;
-      //  x._id = "";
-      //  console.log(x._id);
-        //let newOrder = {};
-        //for (let [k, v] of Object.entries(x)) { if (k != "_id") { newOrder[k] = v } }
-        //return newOrder;
+
       })
       res.status(200).json(newData);
     })
@@ -45,10 +37,14 @@ router.get("/:id", (req, res, next) => {
   Order.find({ invoiceId: id })
     .exec()
     .then(data => {
-
-      let newOrder = {};
-      for (let [k, v] of Object.entries(data["0"])) { if (k != "_id") { newOrder[k] = v } }
-      res.status(200).json(newOrder);
+      let newData = data.map(x => {
+        let test = x.toObject();
+        delete test._id;
+        delete test.__v
+        return test
+      })
+      
+      res.status(200).json(newData);
     })
     .catch((error) => {
       errorFunc(error);
@@ -76,10 +72,10 @@ router.post("/", (req, res, next) => {
       Order.update({ _id: result._id }, { tracking: trackingId })
         .exec()
         .then((result) => {
-          order["tracking"] = trackingId;
-
-          let newOrder = {};
-          for (let [k, v] of Object.entries(order)) { if (k != "_id") { newOrder[k] = v } }
+          let newOrder = order.toObject();
+          delete newOrder._id;
+          newOrder["tracking"] = trackingId;
+          
           res.status(201).json({
             message: "Shippment successfully created!",
             order: newOrder
