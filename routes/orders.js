@@ -18,7 +18,7 @@ router.get("/", (req, res, next) => {
     .then(data => {
       let newData = data.map(x => {
         let newOrder = {};
-        for (let [k, v] of Object.entries(order)) { if (k != "_id") { newOrder[k] = v } }
+        for (let [k, v] of Object.entries(x)) { if (k != "_id") { newOrder[k] = v } }
         return newOrder;
       })
       res.status(200).json(newData);
@@ -35,7 +35,7 @@ router.get("/:id", (req, res, next) => {
     .then(data => {
 
       let newOrder = {};
-      for (let [k, v] of Object.entries(data)) { if (k != "_id") { newOrder[k] = v } }
+      for (let [k, v] of Object.entries(data["0"])) { if (k != "_id") { newOrder[k] = v } }
       res.status(200).json(newOrder);
     })
     .catch((error) => {
