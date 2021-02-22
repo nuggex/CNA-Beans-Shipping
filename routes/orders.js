@@ -16,6 +16,7 @@ router.get("/", (req, res, next) => {
   Order.find()
     .exec()
     .then(data => {
+      delete data._id;
       res.status(200).json(data);
     })
     .catch((error) => {
@@ -28,6 +29,7 @@ router.get("/:id", (req, res, next) => {
   Order.find({ invoiceId: id })
     .exec()
     .then(data => {
+      delete data._id;
       res.status(200).json(data);
     })
     .catch((error) => {
@@ -57,7 +59,7 @@ router.post("/", (req, res, next) => {
         .exec()
         .then((result) => {
           order["tracking"] = trackingId;
-         
+          delete order._id;
           res.status(201).json({
             message: "Shippment successfully created!",
             order: order,
