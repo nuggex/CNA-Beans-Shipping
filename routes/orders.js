@@ -60,6 +60,9 @@ router.post("/", (req, res, next) => {
         .exec()
         .then((result) => {
           console.log(result);
+        })
+        .catch((error) => {
+          errorFunc(error)
         });
     })
     .catch((error) => {
