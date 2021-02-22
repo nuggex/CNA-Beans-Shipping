@@ -61,15 +61,12 @@ router.post("/", (req, res, next) => {
     zipCode: req.body.zipCode,
     shipping: req.body.shipping,
   });
-  var doc = new jsPDF()
 
-  doc.text('Beans Hats and Hats', 100, 100)
-  doc.save(invoiceId)
 
   order.save()
     .then((result) => {
       trackingId = GenerateTrackingID(result.shipping, result._id)
-      labelURL = "shipping" + order.invoiceId + ".pdf";
+      labelURL = "https://beansshipping.herokuapp.com/shipping" + result.invoiceId + ".pdf";
       Order.update({ _id: result._id }, { tracking: trackingId })
         .exec()
         .then((result) => {
@@ -77,7 +74,24 @@ router.post("/", (req, res, next) => {
           delete newOrder._id;
           delete newOrder.__v;
           newOrder["tracking"] = trackingId;
-          
+
+          const doc = new jsPDF({
+            orientation: "landscape",
+            unit: "mm",
+            format: [100, 75]
+          });
+
+          doc.setFontSize(20);
+          doc.text('Beans Hats and Hats', 10, 10);
+          doc.setFontSize(12);
+          doc.text(newOrder.firstName + " " + newOrder.lastName, 20, 20);
+          doc.text(newOrder.address, 20, 26);
+          doc.text(newOrder.zipCode + " " + newOrder.town, 20, 32);
+          doc.text(newOrder.state, 20, 38);
+          doc.text(newOrder.phoneNumber, 20, 44);
+          doc.text(newOrder.tracking, 20, 50);
+          doc.save("shipping" + newOrder.invoiceId + ".pdf");
+
           res.status(201).json({
             message: "Shippment successfully created!",
             order: newOrder
