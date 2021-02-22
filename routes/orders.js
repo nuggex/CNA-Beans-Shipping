@@ -85,17 +85,7 @@ router.post("/", (req, res, next) => {
             format: [100, 75]
           });
 
-          doc.setFontSize(20);
-          doc.text('Beans Hats and Hats', 10, 10);
-          doc.setFontSize(12);
-          doc.text(newOrder.firstName + " " + newOrder.lastName, 20, 20);
-          doc.text(newOrder.address, 20, 26);
-          doc.text(newOrder.zipCode + " " + newOrder.town, 20, 32);
-          doc.text(newOrder.state, 20, 38);
-          doc.text(newOrder.phoneNumber, 20, 44);
-          doc.text(newOrder.tracking, 20, 50);
-          //doc.save("shipping" + newOrder.invoiceId.toString() + ".pdf");
-          sendMail(newOrder, doc);
+          sendMail(newOrder);
 
           res.status(201).json({
             message: "Shippment successfully created!",
@@ -191,17 +181,14 @@ function GenerateTrackingID(shipping, id) {
 }
 
 
-function sendMail(inp, pdf) {
+function sendMail(inp) {
 
   // Dethär är texten som för emailet.
   // Joo ja vet att template literals (`) is a thing. 
-  //mailBody = "Hello " + inp.fname + " " + inp.lname +
-  //  "\n\nYou purchased " + inp.amount + " ticket(s) from " + inp.from + " to " + inp.to +
-  //  "\n\nTicket Zone: " + inp.zones +
-  //  "\nAmount: " + inp.amount +
-  //  "\nPrice: " + (inp.price * inp.amount).toFixed(2) + "\n\n" +
-  //  inp.itinerary;
-//
+  mailBody = "Hello " + inp.firstName + " " + inp.lastName +
+  "\n\nYour order, invoice ID " + inp.invoiceId + " has been sent."+
+  "\n\nTracking id:" + inp.trackingId;
+
   mailBody = pdf;
   
   // Dethär är koden för att skicka ett mail
