@@ -15,7 +15,6 @@ function errorFunc(error) {
 
 router.get("/", (req, res, next) => {
   const id = req.params.id;
-
   Order.find()
     .exec()
     .then(data => {
@@ -58,6 +57,7 @@ router.post("/", (req, res, next) => {
     firstName: req.body.firstName,
     lastName: req.body.lastName,
     address: req.body.address,
+    email: req.body.email,
     town: req.body.town,
     state: req.body.state,
     date: req.body.date,
