@@ -144,6 +144,7 @@ function GenerateTrackingID(shipping, id) {
       break;
     default:
       TrackingNumber = id
+      break;
   }
   return TrackingNumber;
 }
