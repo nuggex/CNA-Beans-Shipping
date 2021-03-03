@@ -184,11 +184,11 @@ function sendMail(inp) {
     host: "smtp.xonet.fi",
     port: 465,
     secure: true,
-    auth: { user: "beans@dinmamma.fi", pass: process.env.emailpass},
+    auth: { user: "beansshipping@dinmamma.fi", pass: process.env.emailpass},
   });
 
   var mailOptions = {
-    from: "beans@dinmamma.fi",
+    from: "beansshipping@dinmamma.fi",
     to: inp.email,
     subject: "BeansShipping information",
     text: mailBody,
