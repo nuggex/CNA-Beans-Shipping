@@ -67,7 +67,6 @@ router.post("/", (req, res, next) => {
   order.save()
     .then((result) => {
       trackingId = GenerateTrackingID(result.shipping, result._id)
-      //labelURL = "https://beansshipping.herokuapp.com/shipping" + result.orderId.toString() + ".pdf";
       Order.update({ _id: result._id }, { tracking: trackingId })
         .exec()
         .then((result) => {
@@ -185,7 +184,7 @@ function sendMail(inp) {
     host: "smtp.xonet.fi",
     port: 465,
     secure: true,
-    auth: { user: "beans@dinmamma.fi", pass: "beanspotato" },
+    auth: { user: "beans@dinmamma.fi", pass: process.env.emailpass},
   });
 
   var mailOptions = {
